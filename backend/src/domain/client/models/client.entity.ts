@@ -1,6 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 
-@Entity({ name: "clients" })
+import Tag from "src/domain/tag/models/tag.entity";
+
+@Entity({ name: 'clients' })
 class Client {
     @PrimaryGeneratedColumn()
     id: number;
@@ -10,6 +12,9 @@ class Client {
 
     @Column()
     email: string;
+
+    @OneToMany(() => Tag, (tag) => tag.client, { eager: true, cascade: true })
+    tags: Tag[];
 };
 
 export default Client;

@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 
 class CreateTagDto {
     @ApiProperty({ type: String, example: 'Tag Name' })
@@ -11,6 +11,11 @@ class CreateTagDto {
     @IsNotEmpty()
     @IsString()
     mac: string;
+
+    @ApiProperty({ type: String, example: '0,52' })
+    @IsNotEmpty()
+    @IsNumber()
+    price: number;
 };
 
 export default CreateTagDto;

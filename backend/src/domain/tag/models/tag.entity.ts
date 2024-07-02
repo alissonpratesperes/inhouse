@@ -1,4 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+
+import Client from "src/domain/client/models/client.entity";
 
 @Entity({ name: 'tags' })
 class Tag {
@@ -10,6 +12,15 @@ class Tag {
 
     @Column()
     mac: string;
+
+    @Column()
+    price: number;
+
+    @Column({ nullable: true })
+    leased?: Date;
+
+    @ManyToOne(() => Client, (client) => client.tags)
+    client: Client;
 };
 
 export default Tag;
