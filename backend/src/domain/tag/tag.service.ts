@@ -6,13 +6,20 @@ import { BadRequestException, ConflictException, Injectable, InternalServerError
 import Tag from "./models/tag.entity";
 import GetTagDto from "./views/get-tag.dto";
 import ListTagDto from "./views/list-tag.dto";
+import ShutTagDto from "./views/shut-tag-dto";
+import LeaseTagDto from "./dtos/lease-tag.dto";
 import CreateTagDto from "./dtos/create-tag.dto";
 import UpdateTagDto from "./dtos/update-tag.dto";
+import Client from "../client/models/client.entity";
+import ResponseDTO from "src/core/dtos/response.dto";
 import PaginationDTO from "src/core/dtos/pagination.dto";
 
 @Injectable()
 class TagService {
-    constructor(@InjectRepository(Tag) private readonly tagRepository: Repository<Tag>) { };
+    constructor(
+        @InjectRepository(Tag) private readonly tagRepository: Repository<Tag>,
+        @InjectRepository(Client) private readonly clientRepository: Repository<Client>
+    ) { };
 
     async create(createTagDto: CreateTagDto): Promise<Tag> {
         try {
@@ -124,6 +131,72 @@ class TagService {
                 throw error;
             } else {
                 throw new InternalServerErrorException('Unable to Delete this Tag.');
+            };
+        };
+    };
+
+    async lease(leaseTagDto: LeaseTagDto): Promise<Tag> {
+        try {
+            const leaseTransaction = async (manager: EntityManager) => {
+                const tag = await manager.findOneBy(Tag, { id: leaseTagDto.id });
+
+                if (!tag) {
+                    throw new NotFoundException('This Tag was not found.');
+                } else {
+                    const client = await this.clientRepository.findOne({ where: { id: leaseTagDto.clientId } });
+
+                    if (!client) {
+                        throw new NotFoundException('This Client was not found.');
+                    } else if (tag.leased != null) {
+                        throw new ConflictException('This Tag is already leased.');
+                    } else {
+                        tag.leased = leaseTagDto.leased;
+                        tag.client = client;
+                    };
+
+                    return this.tagRepository.save(tag);
+                };
+            };
+
+            return await this.tagRepository.manager.transaction(leaseTransaction);
+        } catch (error) {
+            if (error instanceof NotFoundException) {
+                throw error;
+            } else if (error instanceof ConflictException) {
+                throw error;
+            } else {
+                throw new InternalServerErrorException('Unable to Lease.');
+            };
+        };
+    };
+
+    async shut(id: number): Promise<{ cost: number; time: number }> {
+        try {
+            const shutTransaction = async (manager: EntityManager) => {
+                const tag = await manager.findOneBy(Tag, { id });
+
+                if (!tag) {
+                    throw new NotFoundException('This Tag was not found.');
+                } else {
+                    const millisecondsLeased = new Date().getTime() - tag.leased.getTime();
+                    const time = Math.floor(millisecondsLeased / (1000 * 60));
+                    const cost = time * (tag.price as number);
+
+                    tag.leased = null;
+                    tag.client = null;
+
+                    await this.tagRepository.save(tag);
+
+                    return { cost, time };
+                };
+            };
+
+            return await this.tagRepository.manager.transaction(shutTransaction);
+        } catch (error) {
+            if (error instanceof NotFoundException) {
+                throw error;
+            } else {
+                throw new InternalServerErrorException('Unable to Shut.');
             };
         };
     };
