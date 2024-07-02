@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
-class ClientService { };
+class TagService { };
 
-export default ClientService;
+export default TagService;
