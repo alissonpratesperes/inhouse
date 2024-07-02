@@ -10,6 +10,7 @@ class Server {
 
     public async init() {
         this._app = await NestFactory.create(AppModule);
+        this._app.setGlobalPrefix("v1/");
 
         Application.init(this._app);
         Documentation.init(this._app);
