@@ -4,15 +4,12 @@ class ResponseDTO<T> {
         this.data = options.data;
     };
 
-    static success(data?: any) {
-        return new this({
-            success: true,
-            data: data
-        });
-    };
-
     success: boolean;
     data?: T;
+
+    static success(data?: any) {
+        return new this({ success: true, data: data });
+    };
 };
 
 export default ResponseDTO;

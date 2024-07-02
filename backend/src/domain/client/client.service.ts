@@ -16,7 +16,7 @@ class ClientService {
 
     async create(createClientDto: CreateClientDto): Promise<Client> {
         try {
-            const create = async (manager: EntityManager) => {
+            const createTransaction = async (manager: EntityManager) => {
                 const email = await manager.findOneBy(Client, { email: createClientDto.email });
 
                 if (email) {
@@ -31,7 +31,7 @@ class ClientService {
                 };
             };
 
-            return await this.clientRepository.manager.transaction(create);
+            return await this.clientRepository.manager.transaction(createTransaction);
         } catch (error) {
             if (error instanceof BadRequestException) {
                 throw error;
@@ -75,7 +75,7 @@ class ClientService {
 
     async update(id: number, updateClientDto: UpdateClientDto): Promise<Client> {
         try {
-            const update = async (manager: EntityManager) => {
+            const updateTransaction = async (manager: EntityManager) => {
                 const client = await manager.findOneBy(Client, { id });
 
                 if (!client) {
@@ -88,11 +88,9 @@ class ClientService {
                 };
             };
 
-            return await this.clientRepository.manager.transaction(update);
+            return await this.clientRepository.manager.transaction(updateTransaction);
         } catch (error) {
             if (error instanceof NotFoundException) {
-                throw error;
-            } else if (error instanceof BadRequestException) {
                 throw error;
             } else {
                 throw new InternalServerErrorException('Unable to Update this Client.');
@@ -108,7 +106,7 @@ class ClientService {
                 if (!client) {
                     throw new NotFoundException('This Client was not found.');
                 } else if (client.tags.length > 0) {
-                    throw new BadRequestException('This Client has related Tags.');
+                    throw new ConflictException('This Client has related Tags.');
                 } else {
                     return await this.clientRepository.remove(client);
                 };
@@ -118,7 +116,7 @@ class ClientService {
         } catch (error) {
             if (error instanceof NotFoundException) {
                 throw error;
-            } else if (error instanceof BadRequestException) {
+            } else if (error instanceof ConflictException) {
                 throw error;
             } else {
                 throw new InternalServerErrorException('Unable to Delete this Client.');

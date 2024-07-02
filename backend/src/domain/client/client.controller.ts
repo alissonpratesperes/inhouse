@@ -5,7 +5,7 @@ import Client from "./models/client.entity";
 import ClientService from "./client.service";
 import GetClientDto from "./views/get-client.dto";
 import ListClientDto from "./views/list-client.dto";
-import ResponseDTO from "src/core/dtos/respose.dto";
+import ResponseDTO from "src/core/dtos/response.dto";
 import CreateClientDto from "./dtos/create-client.dto";
 import UpdateClientDto from "./dtos/update-client.dto";
 import PaginationDTO from "src/core/dtos/pagination.dto";
