@@ -1,9 +1,9 @@
 import { NestFactory } from "@nestjs/core";
 import { INestApplication } from "@nestjs/common";
 
-import Application from "./Application";
 import { AppModule } from "../app.module";
-import Documentation from "./Documentation";
+import Application from "./application.provider";
+import Documentation from "./documentation.provider";
 
 class Server {
     private _app: INestApplication;
