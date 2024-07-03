@@ -6,15 +6,9 @@ import TagService from "../../services/tag.service";
 import ClientService from "../../../client/services/client.service";
 import ListClient from "../../../client/interfaces/list-client.interface";
 
-@Component({ selector: 'app-detail', templateUrl: './detail.component.html', styleUrl: './detail.component.scss' })
+@Component({ selector: 'app-detail', templateUrl: './detail.component.html', styleUrls: [] })
 export class DetailComponent {
-  constructor(
-    private fb: FormBuilder,
-    private tagService: TagService,
-    private clientService: ClientService,
-    private router: Router,
-    private route: ActivatedRoute
-  ) { };
+  constructor(private router: Router, private fb: FormBuilder, private route: ActivatedRoute, private tagService: TagService, private clientService: ClientService) { };
 
   lease: number | 0 = 0;
   id: string | null = null;
@@ -23,11 +17,7 @@ export class DetailComponent {
   form: FormGroup = this.createForm();
   selectedClient: number | null = null;
 
-  ngOnInit(): void {
-    this.id = this.route.snapshot.paramMap.get('id');
-
-    if (this.id) this.load(this.id);
-  };
+  ngOnInit(): void { this.id = this.route.snapshot.paramMap.get('id'); if (this.id) this.load(this.id); };
 
   get f() { return this.form.controls; };
 
@@ -36,7 +26,7 @@ export class DetailComponent {
       id: [],
       name: ['', [Validators.required]],
       mac: ['', [Validators.required, Validators.email]],
-      price: [],
+      price: [[Validators.required]],
       leased: [],
     });
   };

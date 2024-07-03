@@ -1,7 +1,7 @@
 interface PaginationDTO<T> {
     count: number;
-    totalPages: number;
     hasNext: boolean;
+    totalPages: number;
     totalItems: number;
     items: T[];
 };

@@ -1,24 +1,14 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { NgSelectModule } from '@ng-select/ng-select';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { NgSelectModule } from "@ng-select/ng-select";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
-import { TagRoutingModule } from './tag-routing.module';
-import { ListComponent } from './pages/list/list.component';
-import { DetailComponent } from './pages/detail/detail.component';
-
+import { TagRoutingModule } from "./tag-routing.module";
+import { ListComponent } from "./pages/list/list.component";
+import { DetailComponent } from "./pages/detail/detail.component";
 
 @NgModule({
-  declarations: [
-    ListComponent,
-    DetailComponent
-  ],
-  imports: [
-    CommonModule,
-    TagRoutingModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgSelectModule
-  ]
+  declarations: [ListComponent, DetailComponent],
+  imports: [FormsModule, CommonModule, NgSelectModule, TagRoutingModule, ReactiveFormsModule]
 })
-export class TagModule { }
+export class TagModule { };

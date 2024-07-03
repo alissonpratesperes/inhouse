@@ -1,22 +1,13 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgModule } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
-import { ClientRoutingModule } from './client-routing.module';
-import { ListComponent } from './pages/list/list.component';
-import { DetailComponent } from './pages/detail/detail.component';
-
+import { ListComponent } from "./pages/list/list.component";
+import { ClientRoutingModule } from "./client-routing.module";
+import { DetailComponent } from "./pages/detail/detail.component";
 
 @NgModule({
-  declarations: [
-    ListComponent,
-    DetailComponent
-  ],
-  imports: [
-    CommonModule,
-    ClientRoutingModule,
-    FormsModule,
-    ReactiveFormsModule
-  ]
+  declarations: [ListComponent, DetailComponent],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule, ClientRoutingModule]
 })
-export class ClientModule { }
+export class ClientModule { };
