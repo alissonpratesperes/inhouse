@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ClientRoutingModule } from './client-routing.module';
 import { ListComponent } from './pages/list/list.component';
@@ -13,7 +14,9 @@ import { DetailComponent } from './pages/detail/detail.component';
   ],
   imports: [
     CommonModule,
-    ClientRoutingModule
+    ClientRoutingModule,
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class ClientModule { }
