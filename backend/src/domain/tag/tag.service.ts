@@ -56,7 +56,7 @@ class TagService {
         if (!tag) {
             throw new NotFoundException('This Tag was not found.');
         } else {
-            return plainToInstance(GetTagDto, await this.tagRepository.findOne({ where: { id: tag.id } }));
+            return plainToInstance(GetTagDto, await this.tagRepository.findOne({ where: { id: tag.id }, relations: ['client'] }));
         };
     };
 
