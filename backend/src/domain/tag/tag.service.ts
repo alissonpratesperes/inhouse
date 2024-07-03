@@ -6,12 +6,10 @@ import { BadRequestException, ConflictException, Injectable, InternalServerError
 import Tag from "./models/tag.entity";
 import GetTagDto from "./views/get-tag.dto";
 import ListTagDto from "./views/list-tag.dto";
-import ShutTagDto from "./views/shut-tag-dto";
 import LeaseTagDto from "./dtos/lease-tag.dto";
 import CreateTagDto from "./dtos/create-tag.dto";
 import UpdateTagDto from "./dtos/update-tag.dto";
 import Client from "../client/models/client.entity";
-import ResponseDTO from "src/core/dtos/response.dto";
 import PaginationDTO from "src/core/dtos/pagination.dto";
 
 @Injectable()
@@ -30,8 +28,8 @@ class TagService {
                     throw new BadRequestException('The Mac Address already exists.');
                 } else {
                     const tag = this.tagRepository.create({
-                        name: createTagDto.name,
                         mac: createTagDto.mac,
+                        name: createTagDto.name,
                         price: createTagDto.price,
                         leased: createTagDto.leased
                     });
@@ -90,8 +88,8 @@ class TagService {
                 if (!tag) {
                     throw new NotFoundException('This Tag was not found.');
                 } else {
-                    tag.name = updateTagDto.name;
                     tag.mac = updateTagDto.mac;
+                    tag.name = updateTagDto.name;
                     tag.price = updateTagDto.price;
                     tag.leased = updateTagDto.leased;
 
@@ -150,8 +148,8 @@ class TagService {
                     } else if (tag.leased != null) {
                         throw new ConflictException('This Tag is already leased.');
                     } else {
-                        tag.leased = leaseTagDto.leased;
                         tag.client = client;
+                        tag.leased = leaseTagDto.leased;
                     };
 
                     return this.tagRepository.save(tag);

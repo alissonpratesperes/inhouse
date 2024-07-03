@@ -1,5 +1,5 @@
 class PaginationDTO<T> {
-    constructor(options: { page: number, limit: number, total: number, items: T[]; }) {
+    constructor(options: { page: number; limit: number; total: number; items: T[]; }) {
         this.page = options.page;
         this.limit = options.limit;
         this.total = options.total;
