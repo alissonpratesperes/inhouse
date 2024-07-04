@@ -1,76 +1,20 @@
 <div class="page">
-    <!-- Sidebar -->
-    <aside class="navbar navbar-vertical navbar-expand-sm navbar-dark">
-        <div class="container-fluid">
-            <button class="navbar-toggler" type="button">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <h1 class="navbar-brand navbar-brand-autodark"><svg xmlns="http://www.w3.org/2000/svg" width="16"
-                    height="16" fill="currentColor" class="bi bi-radar" viewBox="0 0 16 16" style="margin-right: 10px;">
-                    <path
-                        d="M6.634 1.135A7 7 0 0 1 15 8a.5.5 0 0 1-1 0 6 6 0 1 0-6.5 5.98v-1.005A5 5 0 1 1 13 8a.5.5 0 0 1-1 0 4 4 0 1 0-4.5 3.969v-1.011A2.999 2.999 0 1 1 11 8a.5.5 0 0 1-1 0 2 2 0 1 0-2.5 1.936v-1.07a1 1 0 1 1 1 0V15.5a.5.5 0 0 1-1 0v-.518a7 7 0 0 1-.866-13.847" />
-                </svg>
-                <a routerLink="/clients">
-                    InHouse
-                </a>
-            </h1>
-            <div class="collapse navbar-collapse" id="sidebar-menu">
-                <ul class="navbar-nav pt-lg-3">
-                    <li class="nav-item">
-                        <a class="nav-link" routerLink="/clients"><svg xmlns="http://www.w3.org/2000/svg" width="16"
-                                height="16" fill="currentColor" class="bi bi-person-workspace" viewBox="0 0 16 16"
-                                style="margin-right: 10px;">
-                                <path
-                                    d="M4 16s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1zm4-5.95a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5" />
-                                <path
-                                    d="M2 1a2 2 0 0 0-2 2v9.5A1.5 1.5 0 0 0 1.5 14h.653a5.4 5.4 0 0 1 1.066-2H1V3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v9h-2.219c.554.654.89 1.373 1.066 2h.653a1.5 1.5 0 0 0 1.5-1.5V3a2 2 0 0 0-2-2z" />
-                            </svg>
-                            <span class="nav-link-title">
-                                Clients
-                            </span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" routerLink="/tags">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                class="bi bi-tags-fill" viewBox="0 0 16 16" style="margin-right: 10px;">
-                                <path
-                                    d="M2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586zm3.5 4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3" />
-                                <path
-                                    d="M1.293 7.793A1 1 0 0 1 1 7.086V2a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l.043-.043z" />
-                            </svg>
-                            <span class="nav-link-title">
-                                Tags
-                            </span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </aside>
     <div class="page-wrapper">
         <div class="page-header d-print-none">
             <div class="container-xl">
                 <div class="row align-items-center">
                     <div class="col">
-                        <div class="page-pretitle">
-                            Listing
-                        </div>
-                        <h2 class="page-title">
-                            Client
-                        </h2>
+                        <div class="page-pretitle"> Listing </div>
+                        <h2 class="page-title"><i class="feather icon-users" style="font-size: 17px;"> </i> <span
+                                style="margin-left: 8px;"> Clients </span> </h2>
                     </div>
                     <div class="col-auto ms-auto">
                         <div class="btn-list">
-                            <a class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal"
-                                data-bs-target="#modal-report" [routerLink]="['register']">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                    class="bi bi-person-plus-fill" viewBox="0 0 16 16">
-                                    <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
-                                    <path fill-rule="evenodd"
-                                        d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5" />
-                                </svg>
-                                New Client
+                            <a class="btn btn-dark d-none d-sm-inline-block" data-bs-toggle="modal"
+                                data-bs-target="#modal-report" [routerLink]="['register']"
+                                style="display: flex !important; flex-direction: row !important; align-items: center !important; justify-content: center !important;">
+                                <i class="feather icon-user-plus" style="font-size: 17px;"> </i>
+                                <span style="margin-left: 8px;"> Register </span>
                             </a>
                         </div>
                     </div>
@@ -79,30 +23,27 @@
         </div>
         <div class="page-body">
             <div class="container-xl">
-                <div class="table-responsive">
+                <div class="table-responsive border rounded-3">
                     <table class="table table-vcenter">
                         <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>NAME</th>
-                                <th>EMAIL</th>
-                                <th class="w-1"></th>
+                                <th> ID </th>
+                                <th> NAME </th>
+                                <th> EMAIL </th>
+                                <th class="w-1"> </th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let client of items">
-                                <td>{{client.id}}</td>
-                                <td class="text-secondary">{{client.name}}</td>
-                                <td class="text-secondary"><a href="#" class="text-reset">{{client.email}}</a></td>
-                                <td style="display: flex; flex-direction: row;"><a class="btn btn-warning"
-                                        [routerLink]="['edit', client.id]"><svg xmlns="http://www.w3.org/2000/svg"
-                                            width="16" height="16" fill="currentColor" class="bi bi-pencil-square"
-                                            viewBox="0 0 16 16" style="margin-right: 5px;">
-                                            <path
-                                                d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                                            <path fill-rule="evenodd"
-                                                d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
-                                        </svg>Edit</a> </td>
+                                <td><code><strong> {{ client.id }} </strong></code></td>
+                                <td class="text-secondary"> {{ client.name }} </td>
+                                <td class="text-secondary"> <i><strong> {{ client.email }} </strong></i> </td>
+                                <td style="display: flex; flex-direction: row;"><a class="btn btn-info"
+                                        [routerLink]="['edit', client.id]"
+                                        style="display: flex !important; flex-direction: row !important; align-items: center !important; justify-content: center !important;">
+                                        <i class="feather icon-edit" style="font-size: 17px;"> </i>
+                                        <span style="margin-left: 8px;"> Edit </span>
+                                    </a> </td>
                             </tr>
                         </tbody>
                     </table>
