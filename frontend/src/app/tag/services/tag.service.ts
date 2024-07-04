@@ -14,19 +14,33 @@ import environment from "../../../enviroments/environment";
 class TagService {
     constructor(private http: HttpClient) { };
 
-    create(tag: GetTag): Observable<ResponseDTO<GetTag>> { return this.http.post<ResponseDTO<GetTag>>(environment.url + '/tags/', tag); };
+    create(tag: GetTag): Observable<ResponseDTO<GetTag>> {
+        return this.http.post<ResponseDTO<GetTag>>(environment.url + '/tags/', tag);
+    };
 
-    get(id: string): Observable<ResponseDTO<GetTag>> { return this.http.get<ResponseDTO<GetTag>>(environment.url + '/tags/' + id); };
+    get(id: string): Observable<ResponseDTO<GetTag>> {
+        return this.http.get<ResponseDTO<GetTag>>(environment.url + '/tags/' + id);
+    };
 
-    list(filters: any, page: number, pageSize: number = 10): Observable<ResponseDTO<PaginationDTO<ListTag>>> { return this.http.get<ResponseDTO<PaginationDTO<ListTag>>>(environment.url + '/tags', { params: { page, pageSize, ...filters } }); };
+    list(filters: any, page: number, pageSize: number = 10): Observable<ResponseDTO<PaginationDTO<ListTag>>> {
+        return this.http.get<ResponseDTO<PaginationDTO<ListTag>>>(environment.url + '/tags', { params: { page, pageSize, ...filters } });
+    };
 
-    update(id: string, tag: GetTag): Observable<ResponseDTO<GetTag>> { return this.http.put<ResponseDTO<GetTag>>(environment.url + '/tags/' + id, tag); };
+    update(id: string, tag: GetTag): Observable<ResponseDTO<GetTag>> {
+        return this.http.put<ResponseDTO<GetTag>>(environment.url + '/tags/' + id, tag);
+    };
 
-    delete(id: string | null): Observable<ResponseDTO<GetTag>> { return this.http.delete<ResponseDTO<GetTag>>(environment.url + '/tags/' + id); };
+    delete(id: string | null): Observable<ResponseDTO<GetTag>> {
+        return this.http.delete<ResponseDTO<GetTag>>(environment.url + '/tags/' + id);
+    };
 
-    lease(leasingInformation: LeaseTag): Observable<ResponseDTO<GetTag>> { return this.http.put<ResponseDTO<GetTag>>(environment.url + '/leases', leasingInformation); };
+    lease(leasingInformation: LeaseTag): Observable<ResponseDTO<GetTag>> {
+        return this.http.put<ResponseDTO<GetTag>>(environment.url + '/leases', leasingInformation);
+    };
 
-    shut(id: number): Observable<ResponseDTO<ShutTag>> { return this.http.post<ResponseDTO<ShutTag>>(environment.url + '/leases/' + id, {}); };
+    shut(id: number): Observable<ResponseDTO<ShutTag>> {
+        return this.http.post<ResponseDTO<ShutTag>>(environment.url + '/leases/' + id, {});
+    };
 };
 
 export default TagService;

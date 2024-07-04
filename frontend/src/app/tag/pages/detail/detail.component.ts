@@ -8,7 +8,13 @@ import ListClient from "../../../client/interfaces/list-client.interface";
 
 @Component({ selector: 'app-detail', templateUrl: './detail.component.html', styleUrls: [] })
 export class DetailComponent {
-  constructor(private router: Router, private fb: FormBuilder, private route: ActivatedRoute, private tagService: TagService, private clientService: ClientService) { };
+  constructor(
+    private router: Router,
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private tagService: TagService,
+    private clientService: ClientService
+  ) { };
 
   lease: number | 0 = 0;
   id: string | null = null;
@@ -17,23 +23,37 @@ export class DetailComponent {
   form: FormGroup = this.createForm();
   selectedClient: number | null = null;
 
-  ngOnInit(): void { this.id = this.route.snapshot.paramMap.get('id'); if (this.id) this.load(this.id); };
+  ngOnInit(): void {
+    this.id = this.route.snapshot.paramMap.get('id');
 
-  get f() { return this.form.controls; };
+    if (this.id) {
+      this.load(this.id);
+    };
+  };
+
+  get f() {
+    return this.form.controls;
+  };
 
   createForm(): FormGroup {
     return this.fb.group({
       id: [],
       name: ['', [Validators.required]],
       mac: ['', [Validators.required, Validators.email]],
-      price: [[Validators.required]],
+      price: ['', [Validators.required]],
       leased: [],
     });
   };
 
   load(id: string) {
-    this.tagService.get(id).subscribe((tag) => { this.form.patchValue(tag.data); this.client = tag.data.client; });
-    this.clientService.list("", 1, 1000).subscribe((response) => { if (response.data) { response.data.items.map((client) => { this.clients.push(client) }); }; });
+    this.tagService.get(id).subscribe((tag) => {
+      this.form.patchValue(tag.data);
+
+      this.client = tag.data.client;
+    });
+    this.clientService.list("", 1, 1000).subscribe((response) => {
+      response.data.items.map((client) => { this.clients.push(client) });
+    });
   };
 
   save() {
@@ -41,14 +61,20 @@ export class DetailComponent {
     formData.price = parseFloat(formData.price);
 
     if (this.id) {
-      this.tagService.update(this.id, formData).subscribe((response) => { this.router.navigate(['/tags']); });
+      this.tagService.update(this.id, formData).subscribe((response) => {
+        this.router.navigate(['/tags']);
+      });
     } else {
-      this.tagService.create(formData).subscribe((response) => { this.router.navigate(['/tags']); });
+      this.tagService.create(formData).subscribe((response) => {
+        this.router.navigate(['/tags']);
+      });
     };
   };
 
   delete() {
-    this.tagService.delete(this.id).subscribe((response) => { this.router.navigate(['/tags']); });
+    this.tagService.delete(this.id).subscribe((response) => {
+      this.router.navigate(['/tags']);
+    });
   };
 
   leasing() {
@@ -70,6 +96,8 @@ export class DetailComponent {
     const formattedTime = getFormattedTime(desiredFormat);
     const leasingInformation = { id: id.id, leased: formattedTime, clientId: this.selectedClient };
 
-    this.tagService.lease(leasingInformation).subscribe((response) => { this.router.navigate(['/tags']); });
+    this.tagService.lease(leasingInformation).subscribe((response) => {
+      this.router.navigate(['/tags']);
+    });
   };
 };
