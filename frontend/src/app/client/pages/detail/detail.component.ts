@@ -75,7 +75,7 @@ export class DetailComponent {
     this.tagService.shut(id).subscribe((response) => {
       this.router.navigate(['/tags']);
 
-      alert(`Custo: ${response.data.cost}, Tempo: ${response.data.time}`);
+      alert(`Custo: R$ ${response.data.cost}, Tempo: ${response.data.time} Minutos`);
     });
   };
 };
