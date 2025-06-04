@@ -1,0 +1,123 @@
+MAIN CONSTRAINTS
+
+	!! Não é possível ter mais de um Volume (para Persistência de Dados) por Container, pois se existisse: 1 Container PostgreSQL para mais de um Banco de Dados para Aplicações separadas, cada DB teria que ter um Volume. Portanto a esquemática terá que ser a seguinte: 1 Container P/> 1 DB Client P/> 1 DB C/> 1 Volume = Resultando então em 1 Container com 1 DB apenas para 1 Volume;
+	!! A nomenclatura padrão para as implementações dos Containers terá que ser a seguinte => empresa-bancodedados-nomedobancodedados e para os Volumes => empresa-bancodedados-volume;
+
+Por exemplo:
+DBName: ctelite_postgresql_core
+DBVolm: ctelite_postgresql_data
+
+POSTGRESQL - Export of DB
+
+	!! Como pelo "pgAdmin > Context Mouse on desired to dump DB > Backup" o pgAdmin Client gera erros, é necessário realizar o Dump do Banco de Dados desejado pelo CMD | Windows Terminal da seguinte forma:
+
+	>_ & "C:\Program Files\PostgreSQL\16\bin\pg_dump.exe" --file "<VERBOSE_DESIRED_DIRECTORY_TO_DUMP>" --host "localhost" --port "5432" --username "`<DB_USERNAME>" --format=c --large-objects --verbose "<DB_NAME>" : & "C:\Program Files\PostgreSQL\16\bin\pg_dump.exe" --file "C:\\Users\\aprat\\Desktop\\teste.SQL" --host "localhost" --port "5432" --username "postgres" --format=c --large-objects --verbose "asm_ecommerce_core"
+
+	!! Passar o comando sem senha mesmo, ao executar logo o CMD irá solicitar a senha do DB...
+
+MONGODB - Two Volumes Mapping
+
+	!! Segue o mesmo fluxo de implementação do Volume e Container para o PostgreSQL, com destaque para um detalhe: o MongoDB, define dois diretórios diferentes: "/data/db" e "/data/configdb" como Volume para a instrução VOLUME. Isto significa que quando o Container for executado a partir da imagem do Mongo, o Docker espera que estes diretórios existam como Volumes montados, se isto não estiver devidamente configurado, o Docker duplica e/ou cria Volumes Anônimos, o que pode desorganizar as estruturas organizadas do Docker. Para evitar, basta na Linha de Comando de Criação e Execução do Container do Mongo, configurar os dois Volumes através da Flag "-v":
+
+	docker run -d --name <CONTAINER_NAME> -p 27017:27017 -v <VOLUME_NAME>:/data/db -v <VOLUME_NAME>:/data/configdb mongo
+
+Assim obtendo o mapeamento dos dois Volumes nativos do MongoDB para o Volume único criado anteriormente.
+
+
+docker run -d --name agorasoumae_mongodb_core -p 27017:27017 -v agorasoumae_mongodb_data:/data/db -v agorasoumae_mongodb_data:/data/configdb mongo
+
+MYSQL - Example
+
+docker run -d --name alcance_mysql_core -p 3306:3306 -e MYSQL_ROOT_PASSWORD=<YOUR-PASSWORD> -v alcance_mysql_data:/var/lib/mysql mysql
+
+DOCKER - Container | PostgreSQL => asm_ecommerce_core
+
+1º >_ ) docker --version
+	_ Docker version 26.1.1, build 4cf5afa
+
+	!! Retorna a Docker Version atual;
+
+2º >_ ) docker pull <IMAGE> : 'docker pull postgres'
+	_ 
+
+	!! Realiza o download da Imagem (última versão) do PostgreSQL diretamente do DockerHub;
+
+3º >_ ) docker image ls
+	_ REPOSITORY   TAG       IMAGE ID       CREATED        SIZE
+	  postgres     latest    0e536f047d0f   35 hours ago   447MB
+
+	!! Lista as Imagens que foram baixadas localmente, a partir do DockerHub;
+
+4º >_ ) docker container ls -a
+	_ CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+	!! Lista os Containers criados localmente;
+	!! Pode ser utilizada Flag: "-a" no final do Comando, para excluir condicionais de listagem. Já que sem esta Flag, somente serão istados os Containers que estão em execução;
+
+5º >_ ) docker volume create <NAME> : docker volume create postgresql_data
+	_ postgresql_data
+
+	!! Cria um novo Volume com o <NAME> informado para a Persistência dos Dados;
+	!! Em caso de se estar refazendo um Container, usar: >_ docker volume rm <VOLUME_NAME_OR_ID> por causa de dados inconsistentes existirem de 	outros Containers criados previamente com tal Volume;
+
+6º >_ ) docker volume ls
+	_ DRIVER    VOLUME NAME
+	  local     postgresql_data
+	
+	!! Lista os Volumes criados até então;
+
+7º >_ ) docker run -d --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=<YOUR-PASSWORD> -v postgresql_data:/var/lib/postgresql/data postgres
+	_ fda4cd47b0f94b5222aa0219c574c42537ba2d116585a2829552bca2350de202
+
+docker run -d --name agorasoumae_mongodb_core -p 27017:27017 -v agorasoumae_mongodb_data:/data/db mongo
+
+docker run -d --name agorasoumae_mongodb_core -p 27017:27017 -v agorasoumae_mongodb_data:/data/db -v agorasoumae_mongodb_data:/data/configdb mongo:latest
+
+	!! Cria um novo Container mapeando informações como: Nome, Porta Interna:Externa, Senha, Volume (criado anteriormente):Diretório de dados para o Banco de Dados, e Imagem baixada anteriormente;
+
+8º >_ ) docker container ls
+	_ CONTAINER ID   IMAGE      COMMAND                  CREATED              STATUS              PORTS                    NAMES
+	  fda4cd47b0f9   postgres   "docker-entrypoint.s…"   About a minute ago   Up About a minute   0.0.0.0:5432->5432/tcp   postgres
+
+docker cp "C:\Users\aprat\Desktop\dump-ares-develop-202407290100.sql" 15741e088de7:\tmp\dump-ares-develop-202407290100.sql
+9º >_ ) docker cp "<DIRECTORY_OF_DUMP_FILE>" <CONTAINER_ID>:\tmp\<DIRECTORY_OF_DUMP_FILE_NAME> : docker cp "C:\Users\aprat\Desktop\asm_ecommerce_core.sql" fda4cd47b0f9:\tmp\asm_ecommerce_core.sql
+	_ Successfully copied 44.2MB to fda4cd47b0f9:\tmp\asm_ecommerce_core.sql
+	
+	!! Compondo tal comando, copia o arquivo SQL do Dump para dentro do Container, para o posterior Restore;
+
+10º >_ ) docker exec -it <CONTAINER_ID> bash : docker exec -it 91e006fff8eb bash
+	_ root@91e006fff8eb:/#
+
+	!! Conecta no Container o executando via bash;
+
+11º >_ ) ls tmp
+	_ asm_ecommerce_core.sql
+
+	!! Confirmação nesta listagem de arquivos dentro do diretório 'tmp', que o Dump foi devidamente copiado;
+	!! Caso necessário excluir algum arquivo dentro do Volume deste Container: rm /tmp/<FILE>;
+
+12º >_ ) docker exec -i <CONTAINER_ID> psql -U <DB_USERNAME> -d <DB_NAME> -f <DIRECTORY_OF_DUMP_FILE_NAME> : docker exec -i fda4cd47b0f9 psql -U postgres -d asm_ecommerce_core -f /tmp/asm-ecommerce_core.sql
+	_ 
+
+	!! Como será centralizado o Azure Data Studio para consumo dos Dados, é importante que o <DB_NAME> já esteja previamente criado na 	GUI do Software, mesmo que vazio, antes de rodar este comando, que por sinal também é executado fora do bash do passo 10º;
+	!! Este comando acima para .SQL exportado pelo César, para um .SQL exportado pelo "pg_dump" é necessário utilizar: pg_restore: docker exec -i <CONTAINER_ID> pg_restore -U <DB_USERNAME> -d <DB_NAME> <DIRECTORY_OF_DUMP_FILE_NAME> : docker exec -i fda4cd47b0f9 pg_restore -U postgres -d asm_ecommerce_core /tmp/asm_ecommerce_core.sql
+
+
+
+
+10/08/2024
+
+eu posso fazer um dump do container do db dele com o commando: docker exec -it 21db09beea27 pg_dump -U postgres cte_core > /tmp/database_dump.sql
+
+docker exec -it 21db09beea27 bash
+ls tmp
+lista que o sql estará lá como o exemplo abaixo:
+
+root@21db09beea27:/# pg_dump -U postgres cte_core > /tmp/database_dump.sql
+root@21db09beea27:/# ls tmp
+database_dump.sql
+
+posteriormente tem sair do bash para copier o dump:
+
+aí roda: docker cp 21db09beea27:/tmp/database_dump.sql "C:\Users\aprat\Desktop" - Gerado certinho
+
